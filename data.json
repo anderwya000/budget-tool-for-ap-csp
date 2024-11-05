@@ -1,0 +1,15 @@
+{
+  "been_used": true,
+  "name": "Wyatt",
+  "payments": [
+    {
+      "item": "Books",
+      "cost": 15.99
+    },
+    {
+      "item": "A mouse",
+      "cost": 5.99
+    }
+  ],
+  "total_budget": 50.0
+}
