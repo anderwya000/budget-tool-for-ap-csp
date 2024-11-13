@@ -35,6 +35,21 @@ title.grid(row=0, column=0, padx=15, pady=15)
 
 items_list = tk.Listbox(root)
 items_list.grid(row=1, rowspan=3, column=0, padx=15, pady=15)
+
+items_chart_frame = tk.Frame(root)
+items_chart_frame.grid(row=1, rowspan=2, column=2, columnspan=2, padx=15, pady=15)
+
+stockListExp = ['AMZN' , 'AAPL', 'JETS', 'CCL', 'NCLH']
+stockSplitExp = [15,25,40,10,10]
+
+fig = Figure() # create a figure object
+ax = fig.add_subplot(111) # add an Axes to the figure
+
+ax.pie(stockSplitExp, radius=1, labels=stockListExp,autopct='%0.2f%%', shadow=True,)
+
+chart1 = FigureCanvasTkAgg(fig,items_chart_frame)
+chart1.get_tk_widget().pack()
+
 payments = data['payments']
 print(payments)
 payment_labels = []
