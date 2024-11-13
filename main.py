@@ -36,14 +36,13 @@ title.grid(row=0, column=0, padx=15, pady=15)
 
 items_list = tk.Listbox(root)
 items_list.grid(row=1, rowspan=3, column=0, padx=15, pady=15)
-payments = {}
-for i in range(len(data['payments'])):
-    payments[data['payments'][i]['item']] = data['payments'][i]['cost']
+payments = data['payments']
 print(payments)
-
-for i in payments:
+payment_labels = []
+for i in range(len(payments)):
     print(i)
-    tk.Label(items_list, text=i + "    " + str(payments[i]), bg='#FFFFFF').pack(padx=50, pady=2)
+    # Concatenates the name of the item, a gap, and the cost and adds them to the
+    tk.Label(items_list, text=str(payments[i]['item']) + "    " + str(payments[i]['cost']), bg='#FFFFFF').pack(padx=50, pady=2)
 
 items_list.config(height=23, width=35)
 
