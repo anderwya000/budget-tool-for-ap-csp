@@ -1,8 +1,7 @@
 import tkinter as tk
 import json
-from tkinter import ttk
-from tkinter.ttk import Label
-
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 def str_to_float(string: str) -> float:
     try:
@@ -40,9 +39,8 @@ payments = data['payments']
 print(payments)
 payment_labels = []
 for i in range(len(payments)):
-    print(i)
-    # Concatenates the name of the item, a gap, and the cost and adds them to the
-    tk.Label(items_list, text=str(payments[i]['item']) + "    " + str(payments[i]['cost']), bg='#FFFFFF').pack(padx=50, pady=2)
+    # Concatenates the name of the item, a gap, and the cost and adds them to the ListBox
+    payment_labels.append(tk.Label(items_list, text=str(payments[i]['item']) + "    " + str(payments[i]['cost']), bg='#FFFFFF').pack(padx=50, pady=2))
 
 items_list.config(height=23, width=35)
 
