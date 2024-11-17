@@ -1,8 +1,8 @@
 import tkinter as tk
 import json
+import matplotlib as mpl
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-
 
 def str_to_float(string: str) -> float:
     try:
@@ -35,12 +35,31 @@ def load():
     entertainment.set(data['expenses']['entertainment'])
     savings.set(data['expenses']['savings'])
     other.set(data['expenses']['other'])
+    global income_costs
+    global expenses_costs
+    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get(), investments.get()]
+    expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
+
 
 def save():
     global data
     data = {'income': {'salary': salary.get(), 'gifts': gifts.get(), 'side hustles': side_hustles.get(), 'passive': passive.get(), 'investments': investments.get()}, 'expenses': {'rent': rent.get(), 'transport': transport.get(), 'food': food.get(), 'health': health.get(), 'savings': savings.get(), 'entertainment': entertainment.get(), 'other': other.get()}}
     with open('data.json', 'w') as file:
         json.dump(data, file, indent=2)
+    global income_costs
+    global expenses_costs
+    # Update income plot
+    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get(), investments.get()]
+    income_plot.clear()
+    income_plot.pie(income_costs, radius=1, labels=income_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
+    income_plot.draw(income_chart.renderer)
+    fig.canvas.draw()
+    # Update expenses plot
+    expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
+    expenses_plot.clear()
+    expenses_plot.pie(expenses_costs, radius=1, labels=expenses_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
+    expenses_plot.draw(income_chart.renderer)
+    fig1.canvas.draw()
 
 
 def validate_numeric_input(action, value):
@@ -87,6 +106,18 @@ passive.set(data['income']['passive'])
 investments = tk.DoubleVar()
 investments.set(data['income']['investments'])
 
+income_list = ['Salary', 'Side Hustles', 'Gifts', 'Passive', 'Investments']
+income_costs = [salary.get(), side_hustles.get(), gifts.get(), passive.get(), investments.get()]
+
+fig = Figure(figsize=(1,1), dpi=300)
+
+income_plot = fig.add_subplot(111)
+income_plot.pie(income_costs, radius=1, labels=income_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
+
+income_chart = FigureCanvasTkAgg(fig, root)
+income_chart.draw()
+income_chart.get_tk_widget().grid(row=2, column=0)
+
 # Expenses variables
 rent = tk.DoubleVar()
 rent.set(data['expenses']['rent'])
@@ -103,6 +134,18 @@ savings.set(data['expenses']['savings'])
 other = tk.DoubleVar()
 other.set(data['expenses']['other'])
 
+expenses_list = ['Rent', 'Transportation', 'Food', 'Health', 'Entertainment', 'Saving', 'Other']
+expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
+
+fig1 = Figure(figsize=(1,1), dpi=300)
+
+expenses_plot = fig1.add_subplot(111)
+expenses_plot.pie(expenses_costs, radius=1, labels=expenses_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
+
+expenses_chart = FigureCanvasTkAgg(fig1, root)
+expenses_chart.draw()
+expenses_chart.get_tk_widget().grid(row=2, column=1)
+
 # Income
 income_label = tk.Label(income_inputs, text='Income', bg='#FFFFFF', font=bold_font)
 income_label.grid(row=0, column=0, columnspan=2)
@@ -112,15 +155,15 @@ salary_label.grid(row=1, column=0)
 salary_input = tk.Entry(income_inputs, textvariable=salary, validate='key', validatecommand=vcmd, width=10)
 salary_input.grid(row=1, column=1)
 
-gifts_label = tk.Label(income_inputs, text='Gifts: ', bg='#FFFFFF')
-gifts_label.grid(row=2, column=0)
-gifts_input = tk.Entry(income_inputs, textvariable=gifts, validate='key', validatecommand=vcmd, width=10)
-gifts_input.grid(row=2, column=1)
-
 side_hustles_label = tk.Label(income_inputs, text='Side Hustles: ', bg='#FFFFFF')
-side_hustles_label.grid(row=3, column=0)
+side_hustles_label.grid(row=2, column=0)
 side_hustles_input = tk.Entry(income_inputs, textvariable=side_hustles, validate='key', validatecommand=vcmd, width=10)
-side_hustles_input.grid(row=3, column=1)
+side_hustles_input.grid(row=2, column=1)
+
+gifts_label = tk.Label(income_inputs, text='Gifts: ', bg='#FFFFFF')
+gifts_label.grid(row=3, column=0)
+gifts_input = tk.Entry(income_inputs, textvariable=gifts, validate='key', validatecommand=vcmd, width=10)
+gifts_input.grid(row=3, column=1)
 
 passive_label = tk.Label(income_inputs, text='Passive: ', bg='#FFFFFF')
 passive_label.grid(row=4, column=0)
