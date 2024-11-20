@@ -1,5 +1,6 @@
 import tkinter as tk
 import json
+import datetime
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -74,6 +75,12 @@ def save():
         json.dump(data, file, indent=2)
 
 
+def export():
+    global data
+    data = {'income': {'salary': salary.get(), 'gifts': gifts.get(), 'side hustles': side_hustles.get(), 'passive': passive.get(), 'investments': investments.get()}, 'expenses': {'rent': rent.get(), 'transport': transport.get(), 'food': food.get(), 'health': health.get(), 'savings': savings.get(), 'entertainment': entertainment.get(), 'other': other.get()}}
+    name = datetime.datetime.today().strftime('%Y-%m-%d %H-%M-%S')
+    with open(f'{name}.json', 'w') as file:
+        json.dump(data, file, indent=2)
 def validate_numeric_input(action, value):
     if action != '1':
         return True
@@ -203,6 +210,8 @@ income_save = tk.Button(income_inputs, text='Save', command=save)
 income_save.grid(row=8, column=0, pady=3, sticky=tk.S)
 income_load = tk.Button(income_inputs, text='Load', command=load)
 income_load.grid(row=8, column=1, pady=3, sticky=tk.S)
+income_export = tk.Button(income_inputs, text='Export', command=export)
+income_export.grid(row=9, column=1, pady=3, sticky=tk.S)
 
 # Expenses
 expenses_label = tk.Label(expenses_inputs, text='Expenses', bg='#FFFFFF', font=bold_font)
@@ -247,6 +256,8 @@ expenses_save = tk.Button(expenses_inputs, text='Save', command=save)
 expenses_save.grid(row=8, column=0, pady=3, sticky=tk.S)
 expenses_load = tk.Button(expenses_inputs, text='Load', command=load)
 expenses_load.grid(row=8, column=1, pady=3, sticky=tk.S)
+expenses_export = tk.Button(expenses_inputs, text='Export', command=export)
+expenses_export.grid(row=9, column=1, pady=3, sticky=tk.S)
 
 update_pies()
 update_comparisons()
