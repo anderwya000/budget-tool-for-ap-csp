@@ -1,8 +1,33 @@
 import tkinter as tk
 import json
-import matplotlib as mpl
 from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+def update_pies():
+    global income_costs
+    global expenses_costs
+    # Update income plot
+    income_plot.clear()
+    income_plot.pie(income_costs, radius=1, labels=income_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
+    income_plot.draw(income_chart.renderer)
+    fig.canvas.draw()
+    # Update expenses plot
+    expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
+    expenses_plot.clear()
+    expenses_plot.pie(expenses_costs, radius=1, labels=expenses_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
+    expenses_plot.draw(income_chart.renderer)
+    fig1.canvas.draw()
+
+    root.after(10, update_pies)
+
+def update_comparisons():
+    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get(), investments.get()]
+    income_label.configure(text=f'Income: ${sum(income_costs)}')
+    expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
+    expenses_label.configure(text=f'Expenses: ${sum(expenses_costs)}')
+
+    root.after(10, update_comparisons)
+
 
 def str_to_float(string: str) -> float:
     try:
@@ -10,6 +35,7 @@ def str_to_float(string: str) -> float:
         return float(string)
     except ValueError:
         return float(0)
+
 
 def first_load():
     global data
@@ -46,20 +72,6 @@ def save():
     data = {'income': {'salary': salary.get(), 'gifts': gifts.get(), 'side hustles': side_hustles.get(), 'passive': passive.get(), 'investments': investments.get()}, 'expenses': {'rent': rent.get(), 'transport': transport.get(), 'food': food.get(), 'health': health.get(), 'savings': savings.get(), 'entertainment': entertainment.get(), 'other': other.get()}}
     with open('data.json', 'w') as file:
         json.dump(data, file, indent=2)
-    global income_costs
-    global expenses_costs
-    # Update income plot
-    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get(), investments.get()]
-    income_plot.clear()
-    income_plot.pie(income_costs, radius=1, labels=income_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
-    income_plot.draw(income_chart.renderer)
-    fig.canvas.draw()
-    # Update expenses plot
-    expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
-    expenses_plot.clear()
-    expenses_plot.pie(expenses_costs, radius=1, labels=expenses_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
-    expenses_plot.draw(income_chart.renderer)
-    fig1.canvas.draw()
 
 
 def validate_numeric_input(action, value):
@@ -70,8 +82,8 @@ def validate_numeric_input(action, value):
             return True
     except ValueError:
         return False
-
     return False
+
 
 first_load()
 root = tk.Tk()
@@ -187,14 +199,14 @@ filler_element2.grid(row=7, column=0)
 filler_element3 = tk.Label(income_inputs, bg='#FFFFFF')
 filler_element3.grid(row=7, column=1)
 
-income_save = tk.Button(income_inputs, text="Save", command=save)
+income_save = tk.Button(income_inputs, text='Save', command=save)
 income_save.grid(row=8, column=0, pady=3, sticky=tk.S)
-income_load = tk.Button(income_inputs, text="Load", command=load)
+income_load = tk.Button(income_inputs, text='Load', command=load)
 income_load.grid(row=8, column=1, pady=3, sticky=tk.S)
 
 # Expenses
-income_label = tk.Label(expenses_inputs, text='Expenses', bg='#FFFFFF', font=bold_font)
-income_label.grid(row=0, column=0, columnspan=2)
+expenses_label = tk.Label(expenses_inputs, text='Expenses', bg='#FFFFFF', font=bold_font)
+expenses_label.grid(row=0, column=0, columnspan=2)
 
 rent_label = tk.Label(expenses_inputs, text='Rent: ', bg='#FFFFFF', width=12)
 rent_label.grid(row=1, column=0)
@@ -231,9 +243,12 @@ other_label.grid(row=7, column=0)
 other_input = tk.Entry(expenses_inputs, textvariable=other, validate='key', validatecommand=vcmd, width=10)
 other_input.grid(row=7, column=1)
 
-expenses_save = tk.Button(expenses_inputs, text="Save", command=save)
+expenses_save = tk.Button(expenses_inputs, text='Save', command=save)
 expenses_save.grid(row=8, column=0, pady=3, sticky=tk.S)
-expenses_load = tk.Button(expenses_inputs, text="Load", command=load)
+expenses_load = tk.Button(expenses_inputs, text='Load', command=load)
 expenses_load.grid(row=8, column=1, pady=3, sticky=tk.S)
+
+update_pies()
+update_comparisons()
 
 root.mainloop()
