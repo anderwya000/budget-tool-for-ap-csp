@@ -26,8 +26,23 @@ def update_comparisons():
     income_label.configure(text=f'Income: ${sum(income_costs)}')
     expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
     expenses_label.configure(text=f'Expenses: ${sum(expenses_costs)}')
+    expenses_colors()
 
     root.after(10, update_comparisons)
+
+
+def expenses_colors():
+    expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
+    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get(), investments.get()]
+    total_income = sum(income_costs)
+    total_expenses = sum(expenses_costs)
+
+    if total_expenses > total_income:
+        for label in expenses_labels:
+            label.config(fg='red')
+    else:
+        for label in expenses_labels:
+            label.config(fg='#000000')
 
 
 def str_to_float(string: str) -> float:
@@ -207,11 +222,11 @@ filler_element3 = tk.Label(income_inputs, bg='#FFFFFF')
 filler_element3.grid(row=7, column=1)
 
 income_save = tk.Button(income_inputs, text='Save', command=save)
-income_save.grid(row=8, column=0, pady=3, sticky=tk.S)
+income_save.grid(row=8, column=0, pady=3, sticky='wes')
 income_load = tk.Button(income_inputs, text='Load', command=load)
-income_load.grid(row=8, column=1, pady=3, sticky=tk.S)
+income_load.grid(row=8, column=1, pady=3, sticky='wes')
 income_export = tk.Button(income_inputs, text='Export', command=export)
-income_export.grid(row=9, column=1, pady=3, sticky=tk.S)
+income_export.grid(row=9, column=0, columnspan=2, pady=3, sticky='wes')
 
 # Expenses
 expenses_label = tk.Label(expenses_inputs, text='Expenses', bg='#FFFFFF', font=bold_font)
@@ -252,12 +267,14 @@ other_label.grid(row=7, column=0)
 other_input = tk.Entry(expenses_inputs, textvariable=other, validate='key', validatecommand=vcmd, width=10)
 other_input.grid(row=7, column=1)
 
+expenses_labels = [rent_label, rent_input, transport_label, transport_input, food_label, food_input, health_label, health_input, entertainment_label, entertainment_input, savings_label, savings_input, other_label, other_input, expenses_label]
+
 expenses_save = tk.Button(expenses_inputs, text='Save', command=save)
-expenses_save.grid(row=8, column=0, pady=3, sticky=tk.S)
+expenses_save.grid(row=8, column=0, pady=3, sticky='wes')
 expenses_load = tk.Button(expenses_inputs, text='Load', command=load)
-expenses_load.grid(row=8, column=1, pady=3, sticky=tk.S)
+expenses_load.grid(row=8, column=1, pady=3, sticky='wes')
 expenses_export = tk.Button(expenses_inputs, text='Export', command=export)
-expenses_export.grid(row=9, column=1, pady=3, sticky=tk.S)
+expenses_export.grid(row=9, column=0, columnspan=2, pady=3, sticky='wes')
 
 update_pies()
 update_comparisons()
