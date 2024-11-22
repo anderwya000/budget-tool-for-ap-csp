@@ -8,6 +8,7 @@ def update_pies():
     global income_costs
     global expenses_costs
     # Update income plot
+    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get(), investments.get()]
     income_plot.clear()
     income_plot.pie(income_costs, radius=1, labels=income_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
     income_plot.draw(income_chart.renderer)
