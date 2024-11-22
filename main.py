@@ -1,6 +1,8 @@
 import tkinter as tk
 import json
 import datetime
+
+from django.core.validators import validate_email
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -96,16 +98,35 @@ def export():
     name = datetime.datetime.today().strftime('%Y-%m-%d %H-%M-%S')
     with open(f'{name}.json', 'w') as file:
         json.dump(data, file, indent=2)
-def validate_numeric_input(action, value):
-    if action != '1':
-        return True
+
+'''
+def validate_input(action, value, widget_name):
     try:
-        if value == '' or float(value) >= 0:
+        if value == '':
+            widget_name = root.nametowidget(widget_name)
+            widget_name.delete(0, tk.END)
+            widget_name.insert(0, '0.0')
+            return False
+        elif float(value) >= 0:
             return True
     except ValueError:
         return False
     return False
-
+'''
+def validate_input(action, value, widget_name):
+    try:
+        if value == '':
+            widget = root.nametowidget(widget_name)
+            widget.configure(validate='none')
+            widget.delete(0, tk.END)
+            widget.insert(0, '0')
+            widget.configure(validate='key')
+            return False
+        elif float(value) >= 0:
+            return True
+    except ValueError:
+        return False
+    return False
 
 first_load()
 root = tk.Tk()
@@ -116,7 +137,7 @@ root.geometry('600x600')
 root.configure(background='#FFFFFF')
 root.title('Budget Calculator')
 
-vcmd = (root.register(validate_numeric_input), '%d', '%P')
+vcmd = (root.register(validate_input), '%d', '%P', '%W')
 
 title = tk.Label(root, text='Budget Calculator', font=('helvetica', 22, 'bold'), bg='#FFFFFF', anchor='center')
 title.grid(row=0, column=0, columnspan=3,padx=15, pady=15)
