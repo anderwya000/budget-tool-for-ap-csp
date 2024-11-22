@@ -13,7 +13,6 @@ def update_pies():
     income_plot.pie(income_costs, radius=1, labels=income_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
     income_plot.draw(income_chart.renderer)
     fig.canvas.draw()
-    # Update expenses plot
     expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
     expenses_plot.clear()
     expenses_plot.pie(expenses_costs, radius=1, labels=expenses_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
@@ -113,7 +112,6 @@ root = tk.Tk()
 
 bold_font = tk.font.Font(family='Segoe UI', size=9, weight='bold')
 
-# Make main window.
 root.geometry('600x600')
 root.configure(background='#FFFFFF')
 root.title('Budget Calculator')
@@ -129,7 +127,6 @@ income_inputs.grid(row=1, column=0, padx=10, sticky=tk.NS)
 expenses_inputs = tk.Listbox(root)
 expenses_inputs.grid(row=1, column=1, padx=10, sticky=tk.NS)
 
-# Income variables
 salary = tk.DoubleVar()
 salary.set(data['income']['salary'])
 gifts = tk.DoubleVar()
@@ -153,7 +150,6 @@ income_chart = FigureCanvasTkAgg(fig, root)
 income_chart.draw()
 income_chart.get_tk_widget().grid(row=2, column=0)
 
-# Expenses variables
 rent = tk.DoubleVar()
 rent.set(data['expenses']['rent'])
 transport = tk.DoubleVar()
@@ -181,7 +177,6 @@ expenses_chart = FigureCanvasTkAgg(fig1, root)
 expenses_chart.draw()
 expenses_chart.get_tk_widget().grid(row=2, column=1)
 
-# Income
 income_label = tk.Label(income_inputs, text='Income', bg='#FFFFFF', font=bold_font)
 income_label.grid(row=0, column=0, columnspan=2)
 
@@ -229,7 +224,6 @@ income_load.grid(row=8, column=1, pady=3, sticky='wes')
 income_export = tk.Button(income_inputs, text='Export', command=export)
 income_export.grid(row=9, column=0, columnspan=2, pady=3, sticky='wes')
 
-# Expenses
 expenses_label = tk.Label(expenses_inputs, text='Expenses', bg='#FFFFFF', font=bold_font)
 expenses_label.grid(row=0, column=0, columnspan=2)
 
