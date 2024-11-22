@@ -113,7 +113,7 @@ root = tk.Tk()
 bold_font = tk.font.Font(family='Segoe UI', size=9, weight='bold')
 
 # Make main window.
-root.geometry('900x600')
+root.geometry('600x600')
 root.configure(background='#FFFFFF')
 root.title('Budget Calculator')
 
