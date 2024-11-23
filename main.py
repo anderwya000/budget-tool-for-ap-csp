@@ -1,6 +1,7 @@
 import tkinter as tk
 import json
 import datetime
+import re
 
 from django.core.validators import validate_email
 from matplotlib.figure import Figure
@@ -115,14 +116,26 @@ def validate_input(action, value, widget_name):
 '''
 def validate_input(action, value, widget_name):
     try:
+        widget = root.nametowidget(widget_name)
         if value == '':
-            widget = root.nametowidget(widget_name)
             widget.configure(validate='none')
             widget.delete(0, tk.END)
             widget.insert(0, '0')
             widget.configure(validate='key')
             return False
-        elif float(value) >= 0:
+        if re.match(r"^0\d+$", value):
+            corrected_value = value.lstrip("0")
+            widget.configure(validate='none')
+            widget.delete(0, tk.END)
+            widget.insert(0, corrected_value)
+            widget.configure(validate='key')
+            if corrected_value == '':
+                widget.configure(validate='none')
+                widget.delete(0, tk.END)
+                widget.insert(0, '0')
+                widget.configure(validate='key')
+            return False
+        if float(value) >= 0:
             return True
     except ValueError:
         return False
