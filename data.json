@@ -1,18 +1,17 @@
 {
   "income": {
-    "salary": 100.0,
-    "gifts": 100.0,
-    "side hustles": 100.0,
-    "passive": 100.0,
-    "investments": 100.0
+    "salary": 1500.0,
+    "gifts": 0.0,
+    "side hustles": 200.0,
+    "passive": 550.0
   },
   "expenses": {
-    "rent": 100.0,
-    "transport": 100.0,
-    "food": 100.0,
-    "health": 100.0,
+    "rent": 650.0,
+    "transport": 50.0,
+    "food": 200.0,
+    "investments": 50.0,
     "savings": 100.0,
     "entertainment": 100.0,
-    "other": 100.0
+    "other": 0.0
   }
 }

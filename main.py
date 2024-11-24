@@ -11,12 +11,12 @@ def update_pies():
     global income_costs
     global expenses_costs
     # Update income plot
-    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get(), investments.get()]
+    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get()]
     income_plot.clear()
     income_plot.pie(income_costs, radius=1, labels=income_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
     income_plot.draw(income_chart.renderer)
     fig.canvas.draw()
-    expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
+    expenses_costs = [rent.get(), transport.get(), food.get(), investments.get(), entertainment.get(), savings.get(), other.get()]
     expenses_plot.clear()
     expenses_plot.pie(expenses_costs, radius=1, labels=expenses_list, autopct='%1.2f%%', shadow=True, textprops={'fontsize': 2.8})
     expenses_plot.draw(income_chart.renderer)
@@ -27,7 +27,7 @@ def update_pies():
 def update_comparisons():
     income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get(), investments.get()]
     income_label.configure(text=f'Income: ${sum(income_costs)}')
-    expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
+    expenses_costs = [rent.get(), transport.get(), food.get(), entertainment.get(), savings.get(), other.get()]
     expenses_label.configure(text=f'Expenses: ${sum(expenses_costs)}')
     expenses_colors()
 
@@ -35,8 +35,8 @@ def update_comparisons():
 
 
 def expenses_colors():
-    expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
-    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get(), investments.get()]
+    expenses_costs = [rent.get(), transport.get(), food.get(), investments.get(), entertainment.get(), savings.get(), other.get()]
+    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get()]
     total_income = sum(income_costs)
     total_expenses = sum(expenses_costs)
 
@@ -72,48 +72,34 @@ def load():
     gifts.set(data['income']['gifts'])
     side_hustles.set(data['income']['side hustles'])
     passive.set(data['income']['passive'])
-    investments.set(data['income']['investments'])
     rent.set(data['expenses']['rent'])
     transport.set(data['expenses']['transport'])
     food.set(data['expenses']['food'])
-    health.set(data['expenses']['health'])
+    investments.set(data['expenses']['investments'])
     entertainment.set(data['expenses']['entertainment'])
     savings.set(data['expenses']['savings'])
     other.set(data['expenses']['other'])
     global income_costs
     global expenses_costs
-    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get(), investments.get()]
-    expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
+    income_costs = [salary.get(), gifts.get(), side_hustles.get(), passive.get()]
+    expenses_costs = [rent.get(), transport.get(), food.get(), investments.get(), entertainment.get(), savings.get(), other.get()]
 
 
 def save():
     global data
-    data = {'income': {'salary': salary.get(), 'gifts': gifts.get(), 'side hustles': side_hustles.get(), 'passive': passive.get(), 'investments': investments.get()}, 'expenses': {'rent': rent.get(), 'transport': transport.get(), 'food': food.get(), 'health': health.get(), 'savings': savings.get(), 'entertainment': entertainment.get(), 'other': other.get()}}
+    data = {'income': {'salary': salary.get(), 'gifts': gifts.get(), 'side hustles': side_hustles.get(), 'passive': passive.get()}, 'expenses': {'rent': rent.get(), 'transport': transport.get(), 'food': food.get(), 'investments': investments.get(), 'savings': savings.get(), 'entertainment': entertainment.get(), 'other': other.get()}}
     with open('data.json', 'w') as file:
         json.dump(data, file, indent=2)
 
 
 def export():
     global data
-    data = {'income': {'salary': salary.get(), 'gifts': gifts.get(), 'side hustles': side_hustles.get(), 'passive': passive.get(), 'investments': investments.get()}, 'expenses': {'rent': rent.get(), 'transport': transport.get(), 'food': food.get(), 'health': health.get(), 'savings': savings.get(), 'entertainment': entertainment.get(), 'other': other.get()}}
+    data = {'income': {'salary': salary.get(), 'gifts': gifts.get(), 'side hustles': side_hustles.get(), 'passive': passive.get()}, 'expenses': {'rent': rent.get(), 'transport': transport.get(), 'food': food.get(), 'investments': investments.get(), 'savings': savings.get(), 'entertainment': entertainment.get(), 'other': other.get()}}
     name = datetime.datetime.today().strftime('%Y-%m-%d %H-%M-%S')
     with open(f'{name}.json', 'w') as file:
         json.dump(data, file, indent=2)
 
-'''
-def validate_input(action, value, widget_name):
-    try:
-        if value == '':
-            widget_name = root.nametowidget(widget_name)
-            widget_name.delete(0, tk.END)
-            widget_name.insert(0, '0.0')
-            return False
-        elif float(value) >= 0:
-            return True
-    except ValueError:
-        return False
-    return False
-'''
+
 def validate_input(action, value, widget_name):
     try:
         widget = root.nametowidget(widget_name)
@@ -169,11 +155,9 @@ side_hustles = tk.DoubleVar()
 side_hustles.set(data['income']['side hustles'])
 passive = tk.DoubleVar()
 passive.set(data['income']['passive'])
-investments = tk.DoubleVar()
-investments.set(data['income']['investments'])
 
-income_list = ['Salary', 'Side Hustles', 'Gifts', 'Passive', 'Investments']
-income_costs = [salary.get(), side_hustles.get(), gifts.get(), passive.get(), investments.get()]
+income_list = ['Salary', 'Side Hustles', 'Gifts', 'Passive']
+income_costs = [salary.get(), side_hustles.get(), gifts.get(), passive.get()]
 
 fig = Figure(figsize=(1,1), dpi=300)
 
@@ -190,8 +174,8 @@ transport = tk.DoubleVar()
 transport.set(data['expenses']['transport'])
 food = tk.DoubleVar()
 food.set(data['expenses']['food'])
-health = tk.DoubleVar()
-health.set(data['expenses']['health'])
+investments = tk.DoubleVar()
+investments.set(data['expenses']['investments'])
 entertainment = tk.DoubleVar()
 entertainment.set(data['expenses']['entertainment'])
 savings = tk.DoubleVar()
@@ -199,8 +183,8 @@ savings.set(data['expenses']['savings'])
 other = tk.DoubleVar()
 other.set(data['expenses']['other'])
 
-expenses_list = ['Rent', 'Transportation', 'Food', 'Health', 'Entertainment', 'Saving', 'Other']
-expenses_costs = [rent.get(), transport.get(), food.get(), health.get(), entertainment.get(), savings.get(), other.get()]
+expenses_list = ['Rent', 'Transportation', 'Food', 'Investments', 'Entertainment', 'Saving', 'Other']
+expenses_costs = [rent.get(), transport.get(), food.get(), investments.get(), entertainment.get(), savings.get(), other.get()]
 
 fig1 = Figure(figsize=(1,1), dpi=300)
 
@@ -234,11 +218,6 @@ passive_label.grid(row=4, column=0)
 passive_input = tk.Entry(income_inputs, textvariable=passive, validate='key', validatecommand=vcmd, width=10)
 passive_input.grid(row=4, column=1)
 
-investments_label = tk.Label(income_inputs, text='Investments: ', bg='#FFFFFF')
-investments_label.grid(row=5, column=0)
-investments_input = tk.Entry(income_inputs, textvariable=investments, validate='key', validatecommand=vcmd, width=10)
-investments_input.grid(row=5, column=1)
-
 filler_element = tk.Label(income_inputs, bg='#FFFFFF')
 filler_element.grid(row=6, column=0)
 
@@ -249,7 +228,10 @@ filler_element2 = tk.Label(income_inputs, bg='#FFFFFF')
 filler_element2.grid(row=7, column=0)
 
 filler_element3 = tk.Label(income_inputs, bg='#FFFFFF')
-filler_element3.grid(row=7, column=1)
+filler_element3.grid(row=5, column=1)
+
+filler_element4 = tk.Label(income_inputs, bg='#FFFFFF')
+filler_element4.grid(row=5, column=1)
 
 income_save = tk.Button(income_inputs, text='Save', command=save)
 income_save.grid(row=8, column=0, pady=3, sticky='wes')
@@ -276,10 +258,10 @@ food_label.grid(row=3, column=0)
 food_input = tk.Entry(expenses_inputs, textvariable=food, validate='key', validatecommand=vcmd, width=10)
 food_input.grid(row=3, column=1)
 
-health_label = tk.Label(expenses_inputs, text='Health: ', bg='#FFFFFF')
-health_label.grid(row=4, column=0)
-health_input = tk.Entry(expenses_inputs, textvariable=health, validate='key', validatecommand=vcmd, width=10)
-health_input.grid(row=4, column=1)
+investments_label = tk.Label(expenses_inputs, text='Investments: ', bg='#FFFFFF')
+investments_label.grid(row=4, column=0)
+investments_input = tk.Entry(expenses_inputs, textvariable=investments, validate='key', validatecommand=vcmd, width=10)
+investments_input.grid(row=4, column=1)
 
 entertainment_label = tk.Label(expenses_inputs, text='Entertainment: ', bg='#FFFFFF')
 entertainment_label.grid(row=5, column=0)
@@ -296,7 +278,7 @@ other_label.grid(row=7, column=0)
 other_input = tk.Entry(expenses_inputs, textvariable=other, validate='key', validatecommand=vcmd, width=10)
 other_input.grid(row=7, column=1)
 
-expenses_labels = [rent_label, rent_input, transport_label, transport_input, food_label, food_input, health_label, health_input, entertainment_label, entertainment_input, savings_label, savings_input, other_label, other_input, expenses_label]
+expenses_labels = [rent_label, rent_input, transport_label, transport_input, food_label, food_input, investments_label, investments_input, entertainment_label, entertainment_input, savings_label, savings_input, other_label, other_input, expenses_label]
 
 expenses_save = tk.Button(expenses_inputs, text='Save', command=save)
 expenses_save.grid(row=8, column=0, pady=3, sticky='wes')
