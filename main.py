@@ -3,7 +3,6 @@ import json
 import datetime
 import re
 
-from django.core.validators import validate_email
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
