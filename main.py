@@ -57,10 +57,16 @@ def str_to_float(string: str) -> float:
 
 def first_load():
     global data
-    with open('data.json', 'r') as file:
-        json_data = file.read()
-        data = json.loads(json_data)
-
+    try:
+        with open('data.json', 'r') as file:
+            json_data = file.read()
+            data = json.loads(json_data)
+    except FileNotFoundError:
+        with open('data.json', 'w') as file:
+            file.write('{"income":{"salary":100.0,"gifts":100.0,"side hustles":100.0,"passive":100.0},"expenses":{"rent":100.0,"transport":100.0,"food":100.0,"investments":100.0,"savings":100.0,"entertainment":100.0,"other":100.0}}')
+        with open('data.json', 'r') as file:
+            json_data = file.read()
+            data = json.loads(json_data)
 
 def load():
     global data
