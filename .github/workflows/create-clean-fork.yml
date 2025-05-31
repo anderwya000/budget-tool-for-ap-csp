@@ -1,0 +1,66 @@
+name: Create Clean Fork
+
+on:
+  push:
+    branches:
+      - main  # Runs when you push to main branch
+  workflow_dispatch:  # Keeps the manual trigger option
+
+jobs:
+  create-clean-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          
+      - name: Create clean version
+        run: |
+          # Create clean directory
+          mkdir clean-temp
+          
+          # Copy only required files
+          cp main.py clean-temp/
+          cp data.json clean-temp/
+          
+          # Remove comments from main.py
+          python -c '
+          import re
+          
+          def remove_comments(content):
+              # Remove full-line comments
+              content = re.sub(r"^\s*#.*$", "", content, flags=re.MULTILINE)
+              # Remove inline comments
+              content = re.sub(r"#.*$", "", content, flags=re.MULTILINE)
+              # Remove empty lines
+              content = re.sub(r"\n\s*\n", "\n", content)
+              return content.strip() + "\n"
+          
+          with open("clean-temp/main.py", "r") as f:
+              content = f.read()
+          
+          with open("clean-temp/main.py", "w") as f:
+              f.write(remove_comments(content))
+          '
+          
+      - name: Create and push to clean branch
+        run: |
+          # Configure git
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          
+          # Create and switch to new branch
+          git checkout --orphan clean
+          
+          # Remove everything and copy clean files
+          git rm -rf .
+          cp -r clean-temp/* .
+          rm -rf clean-temp
+          
+          # Commit and push changes
+          git add .
+          git commit -m "Create clean version"
+          git push origin clean --force 
