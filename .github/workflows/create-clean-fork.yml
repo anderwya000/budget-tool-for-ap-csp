@@ -6,11 +6,16 @@ on:
       - main  # Runs when you push to main branch
   workflow_dispatch:  # Keeps the manual trigger option
 
+permissions:
+  contents: write  # This gives the action permission to push to the repository
+
 jobs:
   create-clean-branch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for all branches
       
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -49,8 +54,8 @@ jobs:
       - name: Create and push to clean branch
         run: |
           # Configure git
-          git config --global user.name "GitHub Action"
-          git config --global user.email "action@github.com"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # Create and switch to new branch
           git checkout --orphan clean
